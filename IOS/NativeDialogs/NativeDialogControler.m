@@ -1146,13 +1146,22 @@ UITextAutocorrectionType getAutocapitalizationTypeFormChar(const char* type){
     cancelable = can;
 }
 -(void)dismissWithButtonIndex:(int32_t)index{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [popover dismissPopoverAnimated:YES];
-        [actionSheet dismissWithClickedButtonIndex:index animated:YES];
-        [alert dismissWithClickedButtonIndex:index animated:YES];
-        [tsalertView dismissWithClickedButtonIndex:index animated:YES];
-        [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
-    });
+    BOOL isIOS_8 = [[[UIDevice currentDevice] systemVersion] floatValue]>=8.0;
+    if( isIOS_8 ) {
+        [popover dismissPopoverAnimated:NO];
+        [actionSheet dismissWithClickedButtonIndex:index animated:NO];
+        [alert dismissWithClickedButtonIndex:index animated:NO];
+        [tsalertView dismissWithClickedButtonIndex:index animated:NO];
+        [sbAlert.view dismissWithClickedButtonIndex:index animated:NO];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [popover dismissPopoverAnimated:YES];
+            [actionSheet dismissWithClickedButtonIndex:index animated:YES];
+            [alert dismissWithClickedButtonIndex:index animated:YES];
+            [tsalertView dismissWithClickedButtonIndex:index animated:YES];
+            [sbAlert.view dismissWithClickedButtonIndex:index animated:YES];
+        });
+    }
 }
 -(UIView*)getView{
     NSLog(@"Getting View");
